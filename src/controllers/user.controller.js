@@ -9,7 +9,7 @@ const registerUser = (req, res) => {
   const { name, picture, email, user_id } = req.user;
   const { age, gender, height, weight, activity, food_type } = req.body;
 
-  const created_at = new Date().toISOString();
+  const created_at = new Date().toISOString().split("T")[0];
   const updated_at = created_at;
 
   const data = {
@@ -147,7 +147,7 @@ const bufferGetData = (req, res) => {};
 const editUserById = (req, res) => {
   const userId = req.params.userId;
 
-  req.body.updated_at = new Date().toISOString();
+  req.body.updated_at = new Date().toISOString().split("T")[0];
 
   const { error, value } = updateUserValidation(req.body);
 
