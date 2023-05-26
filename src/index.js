@@ -3,8 +3,6 @@ const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 3001;
 
-const decodeToken = require("./Middleware/decodeToken");
-
 const helloRouter = require("./routes/hello.route");
 const userRouter = require("./routes/user.route");
 const predictionRouter = require("./routes/prediction.route");

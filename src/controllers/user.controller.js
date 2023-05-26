@@ -1,15 +1,15 @@
-const db = require("../config/db");
+const database = require("../config/db");
 const {
   registerUserValidation,
   updateUserValidation,
 } = require("../validations/user.validation");
 
 //RESGISTRASI USER
-const registerUser = (req, res) => {
+const registerUser = async (req, res) => {
   const { name, picture, email, user_id } = req.user;
   const { age, gender, height, weight, activity, food_type } = req.body;
 
-  const created_at = new Date().toISOString().split("T")[0];
+  const created_at = new Date().toISOString();
   const updated_at = created_at;
 
   const data = {
@@ -35,119 +35,95 @@ const registerUser = (req, res) => {
       .status(422)
       .send({ status: false, statusCode: 422, message: errorMessage });
   }
-
+  const sql = `INSERT INTO users (user_id, name, email, picture, age, gender, height, weight, activity, food_type, created_at, updated_at) VALUES ("${user_id}","${name}", "${email}", "${picture}", "${age}", "${gender}", "${height}", "${weight}", "${activity}", "${food_type}", "${created_at}", "${updated_at}")`;
   try {
-    const sql = `INSERT INTO users (user_id, name, email, picture, age, gender, height, weight, activity, food_type, created_at, updated_at) VALUES ("${user_id}","${name}", "${email}", "${picture}", "${age}", "${gender}", "${height}", "${weight}", "${activity}", "${food_type}", "${created_at}", "${updated_at}")`;
-    db.query(sql, (err, result) => {
-      if (err) {
-        // console.log("error register to DB");
-        return res.status(201).send({
-          status: false,
-          statusCode: 422,
-          message: err.message,
-        });
-      }
-      // console.log("Number of records inserted: " + result.affectedRows);
-      return res.status(201).send({
-        status: true,
-        statusCode: 201,
-        message: "Success Register",
-        data: value,
-      });
+    const results = await database.runQuery(sql);
+    // console.log(results);
+    return res.status(201).send({
+      status: true,
+      statusCode: 201,
+      message: "success register",
+      userId: user_id,
     });
-  } catch (err) {
+  } catch (error) {
+    // console.error(error);
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: err.message,
+      message: error.message,
     });
   }
 };
 
 //LOGIN USER
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
   const userId = req.user.user_id;
-  const sql = "SELECT COUNT(*) FROM users WHERE user_id = ?";
+  const sql = `SELECT COUNT(*) FROM users WHERE user_id = '${userId}'`;
   let count = 0;
   try {
-    db.query(sql, [userId], function (err, result) {
-      if (err) {
-        return res.status(201).send({
-          status: false,
-          statusCode: 422,
-          message: err.message,
-        });
-      }
-      // console.log(result);
-      count = Object.values(result[0])[0];
-      if (count === 1) {
-        return res.status(200).send({
-          status: true,
-          statusCode: 200,
-          message: "Success login",
-          user_id: userId,
-        });
-      } else {
-        return res.status(422).send({
-          status: false,
-          statusCode: 422,
-          message: "Not logged",
-        });
-      }
-    });
-  } catch (err) {
+    const results = await database.runQuery(sql);
+    count = Object.values(results[0])[0];
+    if (count === 1) {
+      return res.status(200).send({
+        status: true,
+        statusCode: 200,
+        message: "Success login",
+        user_id: userId,
+      });
+    } else {
+      return res.status(422).send({
+        status: false,
+        statusCode: 422,
+        message: "Not logged",
+      });
+    }
+    console.log(count);
+  } catch (error) {
+    // console.error(error);
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: err.message,
+      message: error.message,
     });
   }
 };
 
 //GET USER BY ID
-const getUserById = (req, res) => {
+const getUserById = async (req, res) => {
   const userId = req.params.userId;
-  const sql = "SELECT * FROM users WHERE user_id = ?";
+  const sql = `SELECT * FROM users WHERE user_id = '${userId}'`;
   try {
-    db.query(sql, [userId], function (err, result) {
-      if (err) {
-        return res.status(422).send({
-          status: false,
-          statusCode: 422,
-          message: err.message,
-        });
-      }
-      if (result.length === 0) {
-        return res.status(404).send({
-          status: false,
-          statusCode: 404,
-          message: "User Not Found",
-        });
-      } else {
-        return res.status(200).send({
-          status: true,
-          statusCode: 200,
-          message: "Success getDAta",
-          data: result[0],
-        });
-      }
-    });
-  } catch (err) {
+    const results = await database.runQuery(sql);
+    // console.log(results);
+    if (results.length === 0) {
+      return res.status(404).send({
+        status: false,
+        statusCode: 404,
+        message: "User Not Found",
+      });
+    } else {
+      return res.status(200).send({
+        status: true,
+        statusCode: 200,
+        message: "Success getDAta",
+        data: results[0],
+      });
+    }
+  } catch (error) {
+    // console.error(error);
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: err.message,
+      message: error.message,
     });
   }
 };
 
-const bufferGetData = (req, res) => {};
-
 //EDIT USER
-const editUserById = (req, res) => {
+const editUserById = async (req, res) => {
   const userId = req.params.userId;
 
-  req.body.updated_at = new Date().toISOString().split("T")[0];
+  req.body.updated_at = new Date().toISOString();
 
   const { error, value } = updateUserValidation(req.body);
 
@@ -159,36 +135,28 @@ const editUserById = (req, res) => {
   }
 
   const sql2 = `UPDATE users SET ? WHERE user_id = '${userId}'`;
-
   try {
-    db.query(sql2, [value], function (err, result) {
-      if (err) {
-        return res.status(422).send({
-          status: false,
-          statusCode: 422,
-          message: err.message,
-        });
-      } else {
-        if (result.affectedRows === 0) {
-          return res.status(404).send({
-            status: false,
-            statusCode: 404,
-            message: "User Not Found",
-          });
-        } else {
-          return res.status(200).send({
-            status: true,
-            statusCode: 200,
-            message: "Success update Data",
-          });
-        }
-      }
-    });
-  } catch (err) {
+    const results = await database.runQuery(sql2, value);
+    // console.log(results);
+    if (results.affectedRows === 0) {
+      return res.status(404).send({
+        status: false,
+        statusCode: 404,
+        message: "User Not Found",
+      });
+    } else {
+      return res.status(200).send({
+        status: true,
+        statusCode: 200,
+        message: "Success update Data",
+      });
+    }
+  } catch (error) {
+    // console.error(error);
     return res.status(422).send({
       status: false,
       statusCode: 422,
-      message: err.message,
+      message: error.message,
     });
   }
 };
