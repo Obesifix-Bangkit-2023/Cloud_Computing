@@ -31,9 +31,6 @@ const getFoodRecomendation = async (req, res) => {
       message: error.message,
     });
   }
-  // JSON stringify untuk meligat di konsol saja
-  // const dataUserJson = JSON.stringify(data_user);
-  // console.log("ini => " + data_user.name);
   const weight = data_user.weight;
   const height = data_user.height;
   const height_in_m = height / 100;
@@ -50,7 +47,7 @@ const getFoodRecomendation = async (req, res) => {
     food_type: foodType,
   };
 
-  // const mlUrl = process.env.ML_URL;
+  // const mlUrl = process.env.ML_RECOMENDATION_URL;
   // try {
   //   const response = await axios.post(
   //     `${mlUrl}/recomendation`,
