@@ -47,22 +47,24 @@ const getFoodRecomendation = async (req, res) => {
     food_type: foodType,
   };
 
-  // const mlUrl = process.env.ML_RECOMENDATION_URL;
-  // try {
-  //   const response = await axios.post(
-  //     `${mlUrl}/recomendation`,
-  //     dataRecomendation
-  //   );
-  //   const responseData = response.data;
-  //   console.log("Response:", responseData);
-  //   // Menyimpan respons ke dalam variabel lain
-  //   const result = responseData.result;
-  //   console.log("Result:", result);
-  // } catch (error) {
-  //   console.error("Error:", error);
-  // }
-  console.log(dataRecomendation);
-  return res.json({ data_user: dataRecomendation });
+  const mlUrl = process.env.ML_RECOMENDATION_URL;
+  try {
+    const response = await axios.post(
+      `${mlUrl}/recomendation`,
+      dataRecomendation
+    );
+    const responseData = response.data;
+    console.log("Response:", responseData);
+    // Menyimpan respons ke dalam variabel lain
+    const result = responseData.result;
+    console.log("Result:", result);
+    return res.status(200).send({ status: true, food_list: result });
+  } catch (error) {
+    console.error("Error:", error);
+    return res
+      .status(422)
+      .send({ status: false, statusCode: 422, message: error.message });
+  }
 };
 
 module.exports = getFoodRecomendation;
