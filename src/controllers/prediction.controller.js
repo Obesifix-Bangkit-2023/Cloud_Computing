@@ -33,7 +33,9 @@ const predictFood = async (req, res) => {
     const result = responseData.result;
     // console.log("Result:", result);
     await deleteFile(req.file.path);
-    return res.status(200).send({ status: true, food_data: result });
+    return res
+      .status(200)
+      .send({ status: true, statusCode: 200, food_data: result });
   } catch (error) {
     console.error("Error:", error);
     return res

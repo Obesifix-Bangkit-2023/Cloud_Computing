@@ -4,6 +4,8 @@ const decodeToken = require("../Middleware/decodeToken");
 const multer = require("multer");
 const path = require("path");
 
+const dummyPrediction = require("../dummyResponse/prediction.dummy");
+
 const PredictionRouter = express.Router();
 
 const url = path.join(__dirname, "../temp");
@@ -28,7 +30,10 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-console.log(url);
-PredictionRouter.post("/", decodeToken, upload.single("image"), predictFood);
+//endpoint asli
+// PredictionRouter.post("/", decodeToken, upload.single("image"), predictFood);
+
+//dummy endpoint
+PredictionRouter.post("/", dummyPrediction);
 
 module.exports = PredictionRouter;
