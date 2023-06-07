@@ -5,10 +5,10 @@ const decodeToken = require("../Middleware/decodeToken");
 
 const dummyRecomendation = require("../dummyResponse/recomendation.dummy");
 
-//endpoint asli
-// RecomendationRouter.get("/:userId", decodeToken, getFoodRecomendation);
+// endpoint asli
+RecomendationRouter.get("/:userId", decodeToken, getFoodRecomendation);
 
-//endpoint dummy
-RecomendationRouter.get("/:userId", dummyRecomendation);
+// //endpoint dummy
+// RecomendationRouter.get("/:userId", dummyRecomendation);
 
 module.exports = RecomendationRouter;

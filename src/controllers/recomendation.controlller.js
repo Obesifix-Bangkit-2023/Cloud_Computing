@@ -1,4 +1,5 @@
 const database = require("../config/db");
+const dictToArray = require("../helper/dictToArray");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -46,21 +47,20 @@ const getFoodRecomendation = async (req, res) => {
     nutrition_status: nutritionStatus,
     food_type: foodType,
   };
-
-  const mlUrl = process.env.ML_RECOMENDATION_URL;
+  // console.log(dataRecomendation);
+  const mlUrl = process.env.ML_URL;
   try {
     const response = await axios.post(
       `${mlUrl}/recomendation`,
       dataRecomendation
     );
-    const responseData = response.data;
-    console.log("Response:", responseData);
-    // Menyimpan respons ke dalam variabel lain
-    const result = responseData.result;
-    console.log("Result:", result);
+    const responseData = response.data.food_list;
+    //ubah ke array
+    const result = dictToArray(responseData);
+    // console.log("Result:", responseData);
     return res.status(200).send({ status: true, food_list: result });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error send to ML:", error);
     return res
       .status(422)
       .send({ status: false, statusCode: 422, message: error.message });

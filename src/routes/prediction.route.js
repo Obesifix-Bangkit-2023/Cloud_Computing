@@ -31,9 +31,9 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 //endpoint asli
-// PredictionRouter.post("/", decodeToken, upload.single("image"), predictFood);
+PredictionRouter.post("/", decodeToken, upload.single("image"), predictFood);
 
-//dummy endpoint
-PredictionRouter.post("/", dummyPrediction);
+// //dummy endpoint
+// PredictionRouter.post("/", dummyPrediction);
 
 module.exports = PredictionRouter;
