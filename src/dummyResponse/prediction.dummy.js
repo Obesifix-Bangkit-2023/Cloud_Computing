@@ -1,5 +1,6 @@
 const dummyPrediction = (req, res) => {
   //buat raw data jumlah nutrisi harus dikali dulu dengan serving untuk mengubahnya ke gram per sekian serving, contoh  200g apel = 200*0.52 cal/g ya begitu juga untuk nutrisi lainnya
+  //calorie masih bentuk gram
   const dataRes = {
     name: "hotDog",
     serving: 50,

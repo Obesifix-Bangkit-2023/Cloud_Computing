@@ -58,7 +58,9 @@ const getFoodRecomendation = async (req, res) => {
     //ubah ke array
     const result = dictToArray(responseData);
     // console.log("Result:", responseData);
-    return res.status(200).send({ status: true, food_list: result });
+    return res
+      .status(200)
+      .send({ status: true, statusCode: 200, food_list: result });
   } catch (error) {
     console.error("Error send to ML:", error);
     return res

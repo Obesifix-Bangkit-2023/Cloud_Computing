@@ -26,8 +26,7 @@ const dictToArray = (data) => {
     tempObj.food_category = data.FoodCategory[i];
     tempArr = [...tempArr, tempObj];
   }
-  // console.log(data.Calories[2]);
-  // console.log(tempArr);
+  //  CHAR FILTERUBG
   stringSelector(tempArr);
   return tempArr;
 };
