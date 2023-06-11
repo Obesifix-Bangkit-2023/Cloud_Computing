@@ -10,6 +10,7 @@ const createConnection = () => {
   });
 };
 
+//query
 const runQuery = (query, data = null) => {
   return new Promise((resolve, reject) => {
     const connection = createConnection();

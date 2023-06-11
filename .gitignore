@@ -3,3 +3,4 @@
 /package-lock.json
 /src/firebase/firebase-serviceAccount.json
 /src/modelML/*
+/src/config/*.json

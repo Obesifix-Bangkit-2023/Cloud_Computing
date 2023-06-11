@@ -3,21 +3,11 @@ const predictFood = require("../controllers/prediction.controller");
 const decodeToken = require("../Middleware/decodeToken");
 const multer = require("multer");
 const path = require("path");
+const PredictionRouter = express.Router();
 
 const dummyPrediction = require("../dummyResponse/prediction.dummy");
 
-const PredictionRouter = express.Router();
-
-const url = path.join(__dirname, "../temp");
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, url);
-  },
-  filename: (req, file, cb) => {
-    // console.log(file);
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
