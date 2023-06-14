@@ -152,7 +152,7 @@ const editUserById = async (req, res) => {
       });
     }
   } catch (error) {
-    // console.error(error);
+    console.error(error);
     return res.status(422).send({
       status: false,
       statusCode: 422,

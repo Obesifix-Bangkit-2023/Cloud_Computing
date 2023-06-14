@@ -26,7 +26,7 @@ const updateUserValidation = (payload) => {
     height: Joi.number().allow(null),
     weight: Joi.number().allow(null),
     activity: Joi.string().allow(null),
-    food_type: Joi.array().allow(null),
+    food_type: Joi.string().allow(null),
     updated_at: Joi.date().required(),
   });
 
